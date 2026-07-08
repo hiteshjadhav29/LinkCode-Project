@@ -1,238 +1,113 @@
-import sqlite3
-# Database Connection
+import mysql.connector
 
-conn = sqlite3.connect("pharmacy.db")
+conn = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="192008",
+    database="pharmacy_db"
+)
 cursor = conn.cursor()
 
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS medicines(
-    medicine_id INTEGER PRIMARY KEY,
-    medicine_name TEXT NOT NULL,
-    category TEXT,
-    quantity INTEGER,
-    price REAL,
-    expiry_date TEXT
+medicine_id INT PRIMARY KEY,
+medicine_name VARCHAR(100) NOT NULL,
+category VARCHAR(50),
+quantity INT,
+price DECIMAL(10,2),
+expiry_date DATE
 )
 """)
-
 conn.commit()
-# Add Medicine
+
 def add_medicine():
     try:
-        medicine_id = int(input("Enter Medicine ID: "))
-        medicine_name = input("Enter Medicine Name: ")
-        category = input("Enter Category (Tablet/Syrup/Injection): ")
-        quantity = int(input("Enter Quantity: "))
-        price = float(input("Enter Price: "))
-        expiry_date = input("Enter Expiry Date (DD/MM/YYYY): ")
-
-        cursor.execute("""
-        INSERT INTO medicines
-        VALUES(?,?,?,?,?,?)
-        """, (medicine_id, medicine_name, category,
-              quantity, price, expiry_date))
-
+        mid=int(input("Medicine ID: "))
+        name=input("Medicine Name: ")
+        cat=input("Category: ")
+        qty=int(input("Quantity: "))
+        price=float(input("Price: "))
+        exp=input("Expiry Date (YYYY-MM-DD): ")
+        cursor.execute("INSERT INTO medicines VALUES(%s,%s,%s,%s,%s,%s)",
+                       (mid,name,cat,qty,price,exp))
         conn.commit()
+        print("Medicine Added Successfully!")
+    except mysql.connector.Error as e:
+        print("Error:",e)
 
-        print("\nMedicine Added Successfully!")
-
-    except sqlite3.IntegrityError:
-        print("\nMedicine ID already exists!")
-
-
-
-# View Medicines
 def view_medicines():
-
     cursor.execute("SELECT * FROM medicines")
-
-    medicines = cursor.fetchall()
-
-    if len(medicines) == 0:
-        print("\nNo Medicines Available")
-    else:
-        print("\n----------- Medicine List -----------")
-
-        for medicine in medicines:
-            print("-----------------------------------")
-            print("Medicine ID :", medicine[0])
-            print("Name        :", medicine[1])
-            print("Category    :", medicine[2])
-            print("Quantity    :", medicine[3])
-            print("Price       :", medicine[4])
-            print("Expiry Date :", medicine[5])
-
-
-# Search by ID
+    rows=cursor.fetchall()
+    if not rows:
+        print("No Medicines Found")
+    for r in rows:
+        print(r)
 
 def search_by_id():
+    mid=int(input("Medicine ID: "))
+    cursor.execute("SELECT * FROM medicines WHERE medicine_id=%s",(mid,))
+    r=cursor.fetchone()
+    print(r if r else "Medicine Not Found")
 
-    medicine_id = int(input("Enter Medicine ID: "))
-
-    cursor.execute(
-        "SELECT * FROM medicines WHERE medicine_id=?",
-        (medicine_id,)
-    )
-
-    medicine = cursor.fetchone()
-
-    if medicine:
-        print("\nMedicine Found")
-        print(medicine)
-    else:
-        print("\nMedicine Not Found")
-
-
-# Search by Name
 def search_by_name():
-
-    name = input("Enter Medicine Name: ")
-
-    cursor.execute(
-        "SELECT * FROM medicines WHERE medicine_name LIKE ?",
-        ('%' + name + '%',)
-    )
-
-    medicines = cursor.fetchall()
-
-    if medicines:
-
-        print("\nMedicine Found")
-
-        for medicine in medicines:
-            print(medicine)
-
+    name=input("Medicine Name: ")
+    cursor.execute("SELECT * FROM medicines WHERE medicine_name LIKE %s",('%'+name+'%',))
+    rows=cursor.fetchall()
+    if rows:
+        for r in rows: print(r)
     else:
-        print("\nMedicine Not Found")
+        print("Medicine Not Found")
 
-# Update Medicine
 def update_medicine():
-
-    medicine_id = int(input("Enter Medicine ID: "))
-
-    cursor.execute(
-        "SELECT * FROM medicines WHERE medicine_id=?",
-        (medicine_id,)
-    )
-
-    medicine = cursor.fetchone()
-
-    if medicine:
-
-        print("\nEnter New Details")
-
-        new_name = input("New Medicine Name: ")
-        new_price = float(input("New Price: "))
-        new_expiry = input("New Expiry Date: ")
-
-        cursor.execute("""
-        UPDATE medicines
-        SET medicine_name=?,
-            price=?,
-            expiry_date=?
-        WHERE medicine_id=?
-        """, (new_name, new_price, new_expiry, medicine_id))
-
+    mid=int(input("Medicine ID: "))
+    cursor.execute("SELECT * FROM medicines WHERE medicine_id=%s",(mid,))
+    if cursor.fetchone():
+        name=input("New Name: ")
+        price=float(input("New Price: "))
+        exp=input("New Expiry Date (YYYY-MM-DD): ")
+        cursor.execute("UPDATE medicines SET medicine_name=%s,price=%s,expiry_date=%s WHERE medicine_id=%s",
+                       (name,price,exp,mid))
         conn.commit()
-
-        print("\nMedicine Updated Successfully!")
-
+        print("Updated Successfully!")
     else:
-        print("\nMedicine Not Found")
-
-
-
-# Delete Medicine
+        print("Medicine Not Found")
 
 def delete_medicine():
+    mid=int(input("Medicine ID: "))
+    cursor.execute("DELETE FROM medicines WHERE medicine_id=%s",(mid,))
+    conn.commit()
+    print("Deleted Successfully!")
 
-    medicine_id = int(input("Enter Medicine ID: "))
-
-    cursor.execute(
-        "SELECT * FROM medicines WHERE medicine_id=?",
-        (medicine_id,)
-    )
-
-    medicine = cursor.fetchone()
-
-    if medicine:
-
-        cursor.execute(
-            "DELETE FROM medicines WHERE medicine_id=?",
-            (medicine_id,)
-        )
-
-        conn.commit()
-
-        print("\nMedicine Deleted Successfully!")
-
-    else:
-        print("\nMedicine Not Found")
-
-
-# Check Stock
 def check_stock():
+    cursor.execute("SELECT medicine_name,quantity FROM medicines")
+    rows=cursor.fetchall()
+    if not rows:
+        print("No Medicines Available")
+    for n,q in rows:
+        print(f"{n}: {q} Units")
 
-    cursor.execute("""
-    SELECT medicine_name, quantity
-    FROM medicines
-    """)
-
-    medicines = cursor.fetchall()
-
-    if medicines:
-
-        print("\n------ Available Stock ------")
-
-        for medicine in medicines:
-            print(f"{medicine[0]} : {medicine[1]} Units")
-
-    else:
-        print("\nNo Medicines Available")
-
-# Main Menu
 while True:
+    print("\nPHARMACY INVENTORY MANAGEMENT")
+    print("1.Add Medicine")
+    print("2.View Medicines")
+    print("3.Search by ID")
+    print("4.Search by Name")
+    print("5.Update Medicine")
+    print("6.Delete Medicine")
+    print("7.Check Stock")
+    print("8.Exit")
+    ch=input("Enter Choice: ")
 
-    print("\n===================================")
-    print(" PHARMACY INVENTORY MANAGEMENT")
-    print("===================================")
-    print("1. Add Medicine")
-    print("2. View All Medicines")
-    print("3. Search Medicine by ID")
-    print("4. Search Medicine by Name")
-    print("5. Update Medicine")
-    print("6. Delete Medicine")
-    print("7. Check Stock Quantity")
-    print("8. Exit")
-
-    choice = input("\nEnter Your Choice: ")
-
-    if choice == '1':
-        add_medicine()
-
-    elif choice == '2':
-        view_medicines()
-
-    elif choice == '3':
-        search_by_id()
-
-    elif choice == '4':
-        search_by_name()
-
-    elif choice == '5':
-        update_medicine()
-
-    elif choice == '6':
-        delete_medicine()
-
-    elif choice == '7':
-        check_stock()
-
-    elif choice == '8':
-        print("\nThank You for Using Pharmacy Management System!")
+    if ch=="1": add_medicine()
+    elif ch=="2": view_medicines()
+    elif ch=="3": search_by_id()
+    elif ch=="4": search_by_name()
+    elif ch=="5": update_medicine()
+    elif ch=="6": delete_medicine()
+    elif ch=="7": check_stock()
+    elif ch=="8":
         break
-
     else:
-        print("\nInvalid Choice! Please Try Again.")
+        print("Invalid Choice")
 
 conn.close()
