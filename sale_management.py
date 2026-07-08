@@ -7,14 +7,15 @@ import mysql.connector
 conn = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="SAVEDITA@1432"
+    password="SAVEDITA@1432",
+    database="linkcode_project"
 )
 
-setup_cursor = conn.cursor()
-setup_cursor.execute("CREATE DATABASE IF NOT EXISTS pharmacy_db")
-setup_cursor.close()
+# setup_cursor = conn.cursor()
+# setup_cursor.execute("CREATE DATABASE IF NOT EXISTS pharmacy_db")
+# setup_cursor.close()
 
-conn.database = "pharmacy_db"
+# conn.database = "pharmacy_db"
 
 cursor = conn.cursor()
 
