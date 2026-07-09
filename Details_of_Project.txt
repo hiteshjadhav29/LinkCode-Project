@@ -1,0 +1,141 @@
+Pharmacy_Management_System
+│
+├── main.py
+├── database.py
+├── login.py
+├── inventory.py
+├── sales.py
+├── employee.py
+├── expiry.py
+├── reports.py
+├── requirements.txt
+└── README.md  
+
+*Team Members*
+Hitesh (Team Lead)
+Mayuresh
+Gargi
+Anushka
+Savedita
+Srushti
+
+*Hierarchy of the project (Workflow)*
+Pharmacy Management System
+
+1. Login system (Mayuresh) 
+    1.1 Admin login
+           1.1.1 Username
+           1.1.2 Password
+           1.1.3 Change password	
+   1.2 User Login
+          1.1.1 Username
+          1.1.2 Password
+          1.1.3 Change password	
+  1.3 Logout
+2. Inventory Management (Gargi)
+    2.1 Add new Medicine
+           2.1.1 Medicine Id
+           2.1.2 Medicine Name
+           2.1.3 Category(Tablets, Syrup, Injection etc.)
+           2.1.4 Quantity
+           2.1.5 Price
+           2.1.6 Expiry Date 
+   2.2 View all Medicines
+   2.3 Search Medicine by
+         - Name
+         - Id
+  2.4 Update Medicine Details
+         - Edit Medicine Name
+         - Update Price
+         - Change Expiry Date
+  2.5 Delete Medicine
+  2.6 Check Stock Quantity
+          - View Available Stock
+3. Sale Management (Savedita)
+    3.1 New Sale 
+        3.1.1 Sale ID 
+        3.1.2 Customer Name 
+        3.1.3 Customer Contact 
+        3.1.4 Medicine ID 
+        3.1.5 Medicine Name 
+        3.1.6 Quantity Sold 
+        3.1.7 Price per Unit 
+        3.1.8 Total Amount 
+        3.1.9 Sale Date 
+        3.1.10 Payment Method (Cash/UPI/Card) 
+3.2 View All Sales 
+3.3 Search Sale By
+- Sale ID
+- Customer Name
+- Medicine Name
+- Sale Date 
+3.4 Update Sale Details
+- Edit Customer Name
+- Update Quantity
+- Change Payment Method 
+3.5 Delete Sale Record 
+3.6 Generate Bill/Invoice
+- Display Bill
+- Print Bill 
+3.7 Daily/Monthly Sales Report
+- View Daily Sales
+- View Monthly Sales
+- Total Revenue
+4. Expiry Management (Anushka)
+4.1 View Expired Medicines
+   4.1.1 Medicine ID
+   4.1.2 Medicine Name
+   4.1.3 Batch Number
+   4.1.4 Expiry Date
+   4.1.5 Quantity
+
+4.2 View Medicines Expiring in Next 30 Days
+   4.2.1 Medicine ID
+   4.2.2 Medicine Name
+   4.2.3 Batch Number
+   4.2.4 Expiry Date
+   4.2.5 Days Remaining
+
+4.3 Remove Expired Stock
+   4.3.1 Select Expired Medicine
+   4.3.2 Confirm Deletion
+   4.3.3 Remove from Inventory
+   4.3.4 Update Database
+
+5. Reports (Hitesh)
+    5.1 Inventory Reports
+        5.1.1 Generate PDF
+    5.2 Sales Report
+        5.2.1 Generate PDF
+    5.3 Low-stock Report
+        5.3.1 Generate PDF
+    5.4 Profit reports
+        5.4.1 Generate PDF
+6. Employee Management (Srushti)
+    6.1 Add Employee   
+        6.1.1 Employee ID   
+        6.1.2 Employee Name   
+        6.1.3 Department   
+        6.1.4 Designation   
+        6.1.5 Salary 
+    6.2 View Employee  
+        6.2.1 Employee ID   
+        6.2.2 Employee Name   
+        6.2.3 Department   
+        6.2.4 Designation 
+    6.3 Search Employee   
+        6.3.1 Search by ID   
+        6.3.2 Search by Name 
+    6.4 Update Employee   
+        6.4.1 Select Employee   
+        6.4.2 Edit Details   
+        6.4.3 Save Changes 
+    6.5 Delete Employee   
+        6.5.1 Select Employee   	
+        6.5.2 Confirm Deletion   
+        6.5.3 Remove Employee
+
+7. Main Module(Hitesh)
+
+
+
