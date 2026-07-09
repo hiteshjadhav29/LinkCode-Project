@@ -2,14 +2,19 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from datetime import datetime
 import mysql.connector
+from database import conn,cursor
+from Expiry_management import *
+from Inventory_Management import *
+from Login_system import *
+from report import *
+from employee_management import *
 
-
-conn = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="SAVEDITA@1432",
-    database="linkcode_project"
-)
+# conn = mysql.connector.connect(
+#     host="localhost",
+#     user="root",
+#     password="SAVEDITA@1432",
+#     database="linkcode_project"
+# )
 
 # setup_cursor = conn.cursor()
 # setup_cursor.execute("CREATE DATABASE IF NOT EXISTS pharmacy_db")
@@ -17,10 +22,10 @@ conn = mysql.connector.connect(
 
 # conn.database = "pharmacy_db"
 
-cursor = conn.cursor()
+#cursor = conn.cursor()
 
 cursor.execute("""
-CREATE TABLE IF NOT EXISTS medicines(
+CREATE TABLE IF NOT EXISTS medicine(
     medicine_id INT PRIMARY KEY AUTO_INCREMENT,
     medicine_name VARCHAR(50),
     category VARCHAR(50),
@@ -66,7 +71,7 @@ def add_medicine():
             print("Invalid date format. Please use YYYY-MM-DD, e.g. 2027-07-17.")
 
     cursor.execute("""
-    INSERT INTO medicines
+    INSERT INTO medicine
     (medicine_name,category,quantity,price,expiry_date)
     VALUES(%s,%s,%s,%s,%s)
     """, (name, category, quantity, price, expiry))
@@ -78,7 +83,7 @@ def add_medicine():
 
 def view_medicines():
 
-    cursor.execute("SELECT * FROM medicines")
+    cursor.execute("SELECT * FROM medicine")
 
     data = cursor.fetchall()
 
@@ -90,8 +95,14 @@ def view_medicines():
         print("ID\tName\tCategory\tQty\tPrice\tExpiry")
         print("-------------------------------------------------------------")
 
+        print("-"*80)
+
         for row in data:
+
             print(f"{row[0]}\t{row[1]}\t{row[2]}\t{row[3]}\t{row[4]}\t{row[5]}")
+
+            if row[3] < 10:
+                print("   LOW STOCK! Only", row[3], "units left.")
 
 
 def search_medicine():
@@ -103,7 +114,7 @@ def search_medicine():
         return
 
     cursor.execute(
-        "SELECT * FROM medicines WHERE medicine_id=%s",
+        "SELECT * FROM medicine WHERE medicine_id=%s",
         (mid,)
     )
 
@@ -132,7 +143,7 @@ def update_medicine():
         print("Invalid ID. Please enter a number.")
         return
 
-    cursor.execute("SELECT * FROM medicines WHERE medicine_id=%s", (mid,))
+    cursor.execute("SELECT * FROM medicine WHERE medicine_id=%s", (mid,))
     data = cursor.fetchone()
 
     if data:
@@ -145,7 +156,7 @@ def update_medicine():
             return
 
         cursor.execute(
-            "UPDATE medicines SET quantity=%s, price=%s WHERE medicine_id=%s",
+            "UPDATE medicine SET quantity=%s, price=%s WHERE medicine_id=%s",
             (quantity, price, mid)
         )
 
@@ -166,13 +177,13 @@ def delete_medicine():
         print("Invalid ID. Please enter a number.")
         return
 
-    cursor.execute("SELECT * FROM medicines WHERE medicine_id=%s", (mid,))
+    cursor.execute("SELECT * FROM medicine WHERE medicine_id=%s", (mid,))
     data = cursor.fetchone()
 
     if data:
 
         cursor.execute(
-            "DELETE FROM medicines WHERE medicine_id=%s",
+            "DELETE FROM medicine WHERE medicine_id=%s",
             (mid,)
         )
 
@@ -194,12 +205,18 @@ def add_to_cart():
         print("Invalid ID or quantity. Please enter numbers only.")
         return
 
-    cursor.execute("SELECT * FROM medicines WHERE medicine_id=%s", (mid,))
+    cursor.execute("SELECT * FROM medicine WHERE medicine_id=%s", (mid,))
     data = cursor.fetchone()
 
     if data:
 
-        if qty <= data[3]:
+        if qty <= 0:
+            print("Quantity must be greater than 0.")
+
+        elif qty > data[3]:
+            print("Insufficient Stock")
+
+        else:
 
             total = qty * float(data[4])
 
@@ -212,10 +229,6 @@ def add_to_cart():
             })
 
             print("Product Added To Cart")
-
-        else:
-
-            print("Insufficient Stock")
 
     else:
 
@@ -305,7 +318,7 @@ def generate_bill():
         bill_items.append(item)
 
         cursor.execute(
-            "UPDATE medicines SET quantity = quantity - %s WHERE medicine_id=%s",
+            "UPDATE medicine SET quantity = quantity - %s WHERE medicine_id=%s",
             (item["quantity"], item["id"])
         )
 
@@ -393,66 +406,66 @@ def create_pdf():
 
     print("PDF Created Successfully")
 
+def sale_menu():
+    while True:
+        print("\n===== PHARMACY STORE MANAGEMENT =====")
+        print("1. Add Medicine")
+        print("2. View Medicines")
+        print("3. Search Medicine")
+        print("4. Update Medicine")
+        print("5. Delete Medicine")
+        print("6. Add To Cart")
+        print("7. Remove From Cart")
+        print("8. View Cart")
+        print("9. Clear Cart")
+        print("10. Generate Bill")
+        print("11. Create PDF")
+        print("12. Exit")
 
-while True:
-    print("\n===== PHARMACY STORE MANAGEMENT =====")
-    print("1. Add Medicine")
-    print("2. View Medicines")
-    print("3. Search Medicine")
-    print("4. Update Medicine")
-    print("5. Delete Medicine")
-    print("6. Add To Cart")
-    print("7. Remove From Cart")
-    print("8. View Cart")
-    print("9. Clear Cart")
-    print("10. Generate Bill")
-    print("11. Create PDF")
-    print("12. Exit")
+        try:
+            choice = int(input("Enter Your Choice: "))
+        except ValueError:
+            print("Invalid Choice! Please enter a number between 1 and 12.")
+            continue
 
-    try:
-        choice = int(input("Enter Your Choice: "))
-    except ValueError:
-        print("Invalid Choice! Please enter a number between 1 and 12.")
-        continue
+        if choice == 1:
+            add_medicine()
 
-    if choice == 1:
-        add_medicine()
+        elif choice == 2:
+            view_medicines()
 
-    elif choice == 2:
-        view_medicines()
+        elif choice == 3:
+            search_medicine()
 
-    elif choice == 3:
-        search_medicine()
+        elif choice == 4:
+            update_medicine()
 
-    elif choice == 4:
-        update_medicine()
+        elif choice == 5:
+            delete_medicine()
 
-    elif choice == 5:
-        delete_medicine()
+        elif choice == 6:
+            add_to_cart()
 
-    elif choice == 6:
-        add_to_cart()
+        elif choice == 7:
+            remove_from_cart()
 
-    elif choice == 7:
-        remove_from_cart()
+        elif choice == 8:
+            view_cart()
 
-    elif choice == 8:
-        view_cart()
+        elif choice == 9:
+            clear_cart()
 
-    elif choice == 9:
-        clear_cart()
+        elif choice == 10:
+            generate_bill()
 
-    elif choice == 10:
-        generate_bill()
+        elif choice == 11:
+            create_pdf()
 
-    elif choice == 11:
-        create_pdf()
+        elif choice == 12:
+            print("Thank You!")
+            break
 
-    elif choice == 12:
-        print("Thank You!")
-        break
+        else:
+            print("Invalid Choice!")
 
-    else:
-        print("Invalid Choice!")
 
-conn.close()

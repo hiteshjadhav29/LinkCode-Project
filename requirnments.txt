@@ -1,0 +1,5 @@
+login table
+('admin', 'admin123', 'Admin'),
+('user1', 'user123', 'User'),
+('mayuresh', 'mayur123', 'Admin'),
+('hitesh', 'hitesh123', 'Admin');

@@ -1,11 +1,28 @@
 import mysql.connector
-con = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="mayur@6611",
-    database="pharmacy"
-)
-cur = con.cursor()
+from database import conn,cursor
+# con = mysql.connector.connect(
+#     host="localhost",
+#     user="root",
+#     password="mayur@6611",
+#     database="pharmacy"
+# )
+# cur = con.cursor()
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS login (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    role ENUM('Admin','User') NOT NULL
+    );
+""")
+# cursor.execute("""
+#     INSERT INTO login (username, password, role) VALUES
+#     ('admin', 'admin123', 'Admin'),
+#     ('user1', 'user123', 'User'),
+#     ('mayuresh', 'mayur123', 'Admin'),
+#     ('hitesh', 'hitesh123', 'Admin');
+# """)
+conn.commit()
 
 def register():
     print("\n===== Registration =====")
@@ -18,8 +35,8 @@ def register():
     val = (username, password, role)
 
     try:
-        cur.execute(sql, val)
-        con.commit()
+        cursor.execute(sql, val)
+        conn.commit()
         print("Registration Successful")
     except mysql.connector.IntegrityError:
         print("Username already exists!")
@@ -27,41 +44,45 @@ def register():
 def login():
     print("\n===== LOGIN =====")
 
-    username = input("Enter Username : ")
-    password = input("Enter Password : ")
-    role = input("Enter Role (Admin/User) : ")
+    
+    username = input("Username: ")
+    password = input("Password: ")
+    role = input("Role (Admin/User): ")
 
-    sql = "SELECT * FROM login WHERE username=%s AND password=%s AND role=%s"
-    val = (username, password, role)
+    cursor.execute(
+        "SELECT username, role FROM login WHERE username=%s AND password=%s AND role=%s",
+        (username, password, role)
+    )
 
-    cur.execute(sql, val)
-
-    result = cur.fetchone()
+    result = cursor.fetchone()
 
     if result:
-        print("\nLogin Successful")
-        print("Welcome", result[1])
-    else:
-        print("\nInvalid Username or Password")
-while True:
-    print("\n===== PHARMACY MANAGEMENT SYSTEM =====")
-    print("1. Register")
-    print("2. Login")
-    print("3. Exit")
+        print("Login Successful")
+        return result[1]      # "Admin" or "User"
 
-    choice = int(input("Enter Your Choice : "))
+    print("Invalid Username or Password")
+    return None
+    
+def login_menu():
+    while True:
+        print("\n===== PHARMACY MANAGEMENT SYSTEM =====")
+        print("1. Register")
+        print("2. Login")
+        print("3. Exit")
 
-    if choice == 1:
-        register()
+        choice = int(input("Enter Your Choice : "))
 
-    elif choice == 2:
-        login()
+        if choice == 1:
+            register()
 
-    elif choice == 3:
-        print("Thank You!")
-        break
+        elif choice == 2:
+            login()
 
-    else:
-        print("Invalid Choice")
+        elif choice == 3:
+            print("Thank You!")
+            break
 
-con.close()
+        else:
+            print("Invalid Choice")
+
+

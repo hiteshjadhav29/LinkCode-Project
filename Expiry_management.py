@@ -1,21 +1,26 @@
 #database connection
 import mysql.connector
-
-con = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="anushka@2212",
-    database="pharmacy"
-)
+from database import conn,cursor
+from employee_management import *
+from Inventory_Management import *
+from Login_system import *
+from report import *
+from sale_management import *
+# con = mysql.connector.connect(
+#     host="localhost",
+#     user="root",
+#     password="anushka@2212",
+#     database="pharmacy"
+# )
 
 
 # View Expired Medicines
 
-from db import *
+#from db import *
 def view_expired():
 
     query = """
-    SELECT * FROM medicines
+    SELECT * FROM medicine
     WHERE expiry_date < CURDATE();
     """
 
@@ -30,7 +35,14 @@ def view_expired():
     print("\n===== EXPIRED MEDICINES =====")
 
     for row in records:
-        print(row)
+        for row in records:
+            print("-" * 40)
+            print(f"Medicine ID   : {row[0]}")
+            print(f"Medicine Name : {row[1]}")
+            print(f"Category      : {row[2]}")
+            print(f"Quantity      : {row[3]}")
+            print(f"Price         : ₹{row[4]}")
+            print(f"Expiry Date   : {row[5]}")
 
 # View Medicines Expiring
 # Within Next 30 Days
@@ -38,7 +50,7 @@ def view_expired():
 def expiry_30_days():
 
     query = """
-    SELECT * FROM medicines
+    SELECT * FROM medicine
     WHERE expiry_date BETWEEN CURDATE()
     AND DATE_ADD(CURDATE(), INTERVAL 30 DAY);
     """
@@ -61,7 +73,7 @@ def expiry_30_days():
 def remove_expired():
 
     query = """
-    SELECT * FROM medicines
+    SELECT * FROM medicine
     WHERE expiry_date < CURDATE();
     """
 
@@ -83,13 +95,13 @@ def remove_expired():
     if confirm.lower() == "yes":
 
         delete_query = """
-        DELETE FROM medicines
+        DELETE FROM medicine
         WHERE expiry_date < CURDATE();
         """
 
         cursor.execute(delete_query)
 
-        con.commit()
+        conn.commit()
 
         print("\nExpired medicines removed successfully.")
 
@@ -97,32 +109,33 @@ def remove_expired():
         print("\nOperation cancelled.")
 
 # Main Menu
-while True:
+def expiry_menu():
+    while True:
 
-    print("\n")
-    print("=" * 40)
-    print("EXPIRY MANAGEMENT")
-    print("=" * 40)
+        print("\n")
+        print("=" * 40)
+        print("EXPIRY MANAGEMENT")
+        print("=" * 40)
 
-    print("1. View Expired Medicines")
-    print("2. View Medicines Expiring in Next 30 Days")
-    print("3. Remove Expired Stock")
-    print("4. Exit")
+        print("1. View Expired Medicines")
+        print("2. View Medicines Expiring in Next 30 Days")
+        print("3. Remove Expired Stock")
+        print("4. Exit")
 
-    choice = input("\nEnter your choice: ")
+        choice = input("\nEnter your choice: ")
 
-    if choice == "1":
-        view_expired()
+        if choice == "1":
+            view_expired()
 
-    elif choice == "2":
-        expiry_30_days()
+        elif choice == "2":
+            expiry_30_days()
 
-    elif choice == "3":
-        remove_expired()
+        elif choice == "3":
+            remove_expired()
 
-    elif choice == "4":
-        print("\nThank you!")
-        break
+        elif choice == "4":
+            print("\nThank you!")
+            break
 
-    else:
-        print("\nInvalid Choice.")
+        else:
+            print("\nInvalid Choice.")

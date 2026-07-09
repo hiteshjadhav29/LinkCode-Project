@@ -1,13 +1,14 @@
 import mysql.connector
 
-con = mysql.connector.connect(
+conn = mysql.connector.connect(
     host="localhost",
-    user="root",
-    password="mayur@6611",   
-    database="pharmacy"
+    username="root",
+    password="Hitesh@29",   
+    database="linkcode_project"
 )
+cursor=conn.cursor()
 
-if con.is_connected():
+if conn.is_connected():
     print("Database Connected Successfully")
 
-con.close()
+#conn.close()
