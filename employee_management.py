@@ -25,6 +25,19 @@ CREATE TABLE IF NOT EXISTS employee(
 """)
 
 conn.commit()
+# cursor.execute("""
+#     INSERT INTO employee (emp_id, emp_name, department, designation, salary) VALUES
+#     (101, 'Rahul Sharma', 'Sales', 'Pharmacist', 35000.00),
+#     (102, 'Priya Patil', 'Inventory', 'Store Manager', 42000.00),
+#     (103, 'Amit Joshi', 'Accounts', 'Accountant', 38000.00),
+#     (104, 'Sneha Kulkarni', 'Sales', 'Cashier', 25000.00),
+#     (105, 'Rohit Deshmukh', 'Inventory', 'Inventory Executive', 30000.00),
+#     (106, 'Neha Pawar', 'HR', 'HR Executive', 36000.00),
+#     (107, 'Saurabh Singh', 'Sales', 'Senior Pharmacist', 45000.00),
+#     (108, 'Pooja More', 'Customer Service', 'Receptionist', 22000.00),
+#     (109, 'Karan Shah', 'Management', 'Branch Manager', 60000.00),
+#     (110, 'Anjali Verma', 'Quality Control', 'Quality Inspector', 40000.00);
+# """)
 
 def add_employee():
     emp_id = int(input("Enter Employee ID: "))
