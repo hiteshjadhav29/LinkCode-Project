@@ -1,0 +1,47 @@
+*employee table*
+101	Rahul Sharma	Sales	Pharmacist	35000.00
+102	Priya Patil	Inventory	Store Manager	42000.00
+103	Amit Joshi	Accounts	Accountant	38000.00
+104	Sneha Kulkarni	Sales	Cashier	25000.00
+105	Rohit Deshmukh	Inventory	Inventory Executive	30000.00
+106	Neha Pawar	HR	HR Executive	36000.00
+107	Saurabh Singh	Sales	Senior Pharmacist	45000.00
+108	Pooja More	Customer Service	Receptionist	22000.00
+109	Karan Shah	Management	Branch Manager	60000.00
+110	Anjali Verma	Quality Control	Quality Inspector	40000.00
+
+*login table*
+1	admin	admin123	Admin
+2	user1	user123	User
+3	mayuresh	mayur123	Admin
+4	hitesh	hitesh123	Admin
+
+*medicine table*
+1	Paracetamol 500mg	Tablet	117	8.50	12.00	2027-12-31
+2	Amoxicillin 250mg	Capsule	75	18.00	25.00	2027-10-15
+3	Cetirizine 10mg	Tablet	45	4.00	7.50	2027-09-20
+4	Cough Syrup	Syrup	30	55.00	80.00	2027-08-25
+5	Insulin Injection	Injection	18	420.00	550.00	2027-07-30
+6	Vitamin C	Tablet	150	3.00	5.00	2028-01-10
+7	ORS Powder	Powder	60	12.00	18.00	2027-11-18
+8	Pain Relief Gel	Gel	25	45.00	65.00	2027-12-15
+9	Eye Drops	Drops	40	35.00	55.00	2027-10-05
+10	Multivitamin	Capsule	95	15.00	24.00	2028-02-14
+
+*report table*
+1	Inventory Report	Admin	2026-07-08 11:24:48	Inventory_Report.pdf
+2	Sales Report	Admin	2026-07-08 11:24:48	Sales_Report.pdf
+3	Low Stock Report	Admin	2026-07-08 11:24:48	Low_Stock_Report.pdf
+4	Profit Report	Admin	2026-07-08 11:24:48	Profit_Report.pdf
+
+*sales table*
+1	Rahul Sharma	9876543210	1	Paracetamol 500mg	5	12.00	60.00	2026-07-01	Cash
+2	Priya Patil	9988776655	2	Amoxicillin 250mg	3	25.00	75.00	2026-07-02	UPI
+3	Amit Joshi	9123456789	4	Cough Syrup	2	80.00	160.00	2026-07-03	Card
+4	Sneha Kulkarni	9001122334	5	Insulin Injection	1	550.00	550.00	2026-07-04	Cash
+5	Rohit Deshmukh	9090909090	6	Vitamin C	10	5.00	50.00	2026-07-05	UPI
+6	Neha Pawar	9876501234	3	Cetirizine 10mg	6	7.50	45.00	2026-07-05	Cash
+7	Saurabh Singh	9988007766	7	ORS Powder	4	18.00	72.00	2026-07-06	Card
+8	Pooja More	9871234567	8	Pain Relief Gel	2	65.00	130.00	2026-07-06	UPI
+9	Karan Shah	9900112233	9	Eye Drops	1	55.00	55.00	2026-07-07	Cash
+10	Anjali Verma	9765432109	10	Multivitamin	5	24.00	120.00	2026-07-07	Card
