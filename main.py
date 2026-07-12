@@ -5,7 +5,7 @@ from Expiry_management import expiry_menu
 from report import reports_menu
 from sale_management import sale_menu
 
-
+#only for admin login
 def admin_menu():
     while True:
 
@@ -44,7 +44,7 @@ def admin_menu():
         else:
             print("Invalid Choice")
 
-
+#for user login
 def user_menu():
     while True:
 
@@ -71,7 +71,7 @@ def user_menu():
         else:
             print("Invalid Choice")
 
-
+#login or regisert
 def main():
 
     while True:
@@ -107,6 +107,6 @@ def main():
         else:
             print("Invalid Choice")
 
-
+#to avoid accidental scrpit runs
 if __name__ == "__main__":
     main()
