@@ -8,6 +8,9 @@ from Inventory_Management import *
 from Login_system import *
 from report import *
 from employee_management import *
+import smtplib
+import os
+from email.message import EmailMessage
 
 
 cursor.execute("""
@@ -331,6 +334,8 @@ def generate_bill():
 
     print("Bill Generated Successfully")
 
+    
+
 
 def create_pdf():
 
@@ -391,6 +396,37 @@ def create_pdf():
     pdf.save()
 
     print("PDF Created Successfully")
+
+    receiver = input("Enter Receiver Gmail: ")
+    sender = "hiteshj2900@gmail.com"
+    app_password = "zzsgbkzpypmzfkax"
+
+    msg = EmailMessage()
+
+    msg["Subject"] = "Pharmacy bill PDF"
+    msg["From"] = sender
+    msg["To"] = receiver
+
+    msg.set_content("Please find the attached Pharmacy Bill PDF.")
+
+    with open("Bill.pdf", "rb") as f:
+        msg.add_attachment(
+            f.read(),
+            maintype="application",
+            subtype="pdf",
+            filename=os.path.basename("Bill.pdf")
+        )
+
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+            smtp.login(sender, app_password)
+            smtp.send_message(msg)
+
+        print("PDF Sent Successfully!")
+
+    except Exception as e:
+        print("Error:", e)
+
 
 def sale_menu():
     while True:
