@@ -5,13 +5,7 @@ from employee_management import *
 from Login_system import *
 from report import *
 from sale_management import *
-# conn = mysql.connector.connect(
-#     host="localhost",
-#     user="root",
-#     password="192008",
-#     database="pharmacy_db"
-# )
-# cursor = conn.cursor()
+
 
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS medicine(

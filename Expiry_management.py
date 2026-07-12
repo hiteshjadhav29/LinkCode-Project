@@ -6,17 +6,7 @@ from Inventory_Management import *
 from Login_system import *
 from report import *
 from sale_management import *
-# con = mysql.connector.connect(
-#     host="localhost",
-#     user="root",
-#     password="anushka@2212",
-#     database="pharmacy"
-# )
 
-
-# View Expired Medicines
-
-#from db import *
 def view_expired():
 
     query = """

@@ -9,20 +9,6 @@ from Login_system import *
 from report import *
 from employee_management import *
 
-# conn = mysql.connector.connect(
-#     host="localhost",
-#     user="root",
-#     password="SAVEDITA@1432",
-#     database="linkcode_project"
-# )
-
-# setup_cursor = conn.cursor()
-# setup_cursor.execute("CREATE DATABASE IF NOT EXISTS pharmacy_db")
-# setup_cursor.close()
-
-# conn.database = "pharmacy_db"
-
-#cursor = conn.cursor()
 
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS medicine(

@@ -1,12 +1,6 @@
 import mysql.connector
 from database import conn,cursor
-# con = mysql.connector.connect(
-#     host="localhost",
-#     user="root",
-#     password="mayur@6611",
-#     database="pharmacy"
-# )
-# cur = con.cursor()
+
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS login (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,13 +9,7 @@ cursor.execute("""
     role ENUM('Admin','User') NOT NULL
     );
 """)
-# cursor.execute("""
-#     INSERT INTO login (username, password, role) VALUES
-#     ('admin', 'admin123', 'Admin'),
-#     ('user1', 'user123', 'User'),
-#     ('mayuresh', 'mayur123', 'Admin'),
-#     ('hitesh', 'hitesh123', 'Admin');
-# """)
+
 conn.commit()
 
 def register():
