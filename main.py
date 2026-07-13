@@ -1,4 +1,4 @@
-from Login_system import register, login
+from Login_system import register, login, change_password, forgot_password
 from Inventory_Management import inventory_menu
 from employee_management import employee_menu
 from Expiry_management import expiry_menu
@@ -82,7 +82,9 @@ def main():
 
         print("1. Register")
         print("2. Login")
-        print("3. Exit")
+        print("3. Change Password")
+        print("4. Forgot Password")
+        print("5. Exit")
 
         choice = input("Enter Choice : ")
 
@@ -100,6 +102,12 @@ def main():
                 user_menu()
 
         elif choice == "3":
+            change_password()
+
+        elif choice == "4":
+            forgot_password()
+
+        elif choice == "5":
 
             print("Thank You For Using Pharmacy Management System")
             break
