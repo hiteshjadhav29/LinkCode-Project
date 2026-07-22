@@ -36,13 +36,8 @@ def register():
         else:
             print("Passwords do not match. Try again.")
 
-    while True:
-        role = input("Enter Role (Admin/User) : ").capitalize()
-
-        if role in ["Admin", "User"]:
-            break
-        else:
-            print("Invalid role. Please enter Admin or User.")
+    # Default role is User
+    role = "User"
 
     sql = """
     INSERT INTO login(username,email,password,role)
@@ -66,29 +61,20 @@ def login():
     username = input("Username : ").strip()
     password = input("Password : ").strip()
 
-    while True:
-        role = input("Role (Admin/User) : ").capitalize()
-
-        if role in ["Admin", "User"]:
-            break
-        else:
-            print("Invalid Role.")
-
     cursor.execute("""
     SELECT username, role
     FROM login
     WHERE username=%s
     AND password=%s
-    AND role=%s
-    """, (username, password, role))
+    """, (username, password))
 
     user = cursor.fetchone()
 
     if user:
         print("\nLogin Successful!")
-        return user[1]
+        return user[1]      # Returns Admin or User
 
-    print("\nInvalid Username, Password or Role.")
+    print("\nInvalid Username or Password.")
     return None
 
 # ---------------- CHANGE PASSWORD ---------------- #
