@@ -4,7 +4,7 @@ import random
 import smtplib
 from email.mime.text import MIMEText
 
-# Create Login Table
+
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS login (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -19,7 +19,7 @@ conn.commit()
 
 
 
-# ---------------- REGISTER ---------------- #
+
 
 def register():
     print("\n========== REGISTER ==========")
@@ -36,7 +36,7 @@ def register():
         else:
             print("Passwords do not match. Try again.")
 
-    # Default role is User
+    
     role = "User"
 
     sql = """
@@ -52,7 +52,7 @@ def register():
     except mysql.connector.IntegrityError:
         print("\nUsername or Email already exists.")
 
-# ---------------- LOGIN ---------------- #
+
 
 def login():
 
@@ -72,12 +72,12 @@ def login():
 
     if user:
         print("\nLogin Successful!")
-        return user[1]      # Returns Admin or User
+        return user[1]     
 
     print("\nInvalid Username or Password.")
     return None
 
-# ---------------- CHANGE PASSWORD ---------------- #
+
 
 def change_password():
 
