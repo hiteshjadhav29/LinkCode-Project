@@ -5,6 +5,7 @@ from Inventory_Management import *
 from Login_system import *
 from report import *
 from sale_management import *
+from tabulate import tabulate
 
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS employee(
@@ -40,9 +41,15 @@ def view_employee():
     records = cursor.fetchall()
 
     if records:
-        print("\nEmployee Records:")
-        for row in records:
-            print(row)
+        headers = [
+            "Employee ID",
+            "Employee Name",
+            "Department",
+            "Designation",
+            "Salary"
+        ]
+
+        print(tabulate(records, headers=headers, tablefmt="fancy_grid"))
     else:
         print("No employee records found.")
 
@@ -115,7 +122,15 @@ def search_employee():
         record = cursor.fetchone()
 
         if record:
-            print(record)
+            headers = [
+                "Employee ID",
+                "Employee Name",
+                "Department",
+                "Designation",
+                "Salary"
+            ]
+
+            print(tabulate([record], headers=headers, tablefmt="fancy_grid"))
         else:
             print("Employee Not Found")
 
@@ -130,8 +145,15 @@ def search_employee():
         records = cursor.fetchall()
 
         if records:
-            for row in records:
-                print(row)
+            headers = [
+                "Employee ID",
+                "Employee Name",
+                "Department",
+                "Designation",
+                "Salary"
+            ]
+
+            print(tabulate(records, headers=headers, tablefmt="fancy_grid"))
         else:
             print("Employee Not Found")
 

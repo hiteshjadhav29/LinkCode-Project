@@ -6,6 +6,7 @@ from Inventory_Management import *
 from Login_system import *
 from report import *
 from sale_management import *
+from tabulate import tabulate
 
 def view_expired():
 
@@ -15,24 +16,35 @@ def view_expired():
     """
 
     cursor.execute(query)
-
     records = cursor.fetchall()
 
-    if len(records) == 0:
+    if not records:
         print("\nNo expired medicines found.")
         return
 
-    print("\n===== EXPIRED MEDICINES =====")
+    headers = [
+        "Medicine ID",
+        "Medicine Name",
+        "Category",
+        "Quantity",
+        "Price",
+        "Expiry Date"
+    ]
+
+    formatted = []
 
     for row in records:
-        for row in records:
-            print("-" * 40)
-            print(f"Medicine ID   : {row[0]}")
-            print(f"Medicine Name : {row[1]}")
-            print(f"Category      : {row[2]}")
-            print(f"Quantity      : {row[3]}")
-            print(f"Price         : ₹{row[4]}")
-            print(f"Expiry Date   : {row[5]}")
+        formatted.append([
+            row[0],
+            row[1],
+            row[2],
+            row[3],
+            f"₹{float(row[4]):,.2f}",
+            row[5]
+        ])
+
+    print("\n===== EXPIRED MEDICINES =====\n")
+    print(tabulate(formatted, headers=headers, tablefmt="fancy_grid"))
 
 # View Medicines Expiring
 # Within Next 30 Days
@@ -46,50 +58,83 @@ def expiry_30_days():
     """
 
     cursor.execute(query)
-
     records = cursor.fetchall()
 
-    if len(records) == 0:
+    if not records:
         print("\nNo medicines expiring within 30 days.")
         return
 
-    print("\n===== EXPIRING WITHIN 30 DAYS =====")
+    headers = [
+        "Medicine ID",
+        "Medicine Name",
+        "Category",
+        "Quantity",
+        "Price",
+        "Expiry Date"
+    ]
+
+    formatted = []
 
     for row in records:
-        print(row)
+        formatted.append([
+            row[0],
+            row[1],
+            row[2],
+            row[3],
+            f"₹{float(row[4]):,.2f}",
+            row[5]
+        ])
+
+    print("\n===== MEDICINES EXPIRING WITHIN 30 DAYS =====\n")
+    print(tabulate(formatted, headers=headers, tablefmt="fancy_grid"))
 
 
 # Remove Expired Stock
 def remove_expired():
 
-    query = """
-    SELECT * FROM medicine
-    WHERE expiry_date < CURDATE();
-    """
-
-    cursor.execute(query)
+    cursor.execute("""
+        SELECT * FROM medicine
+        WHERE expiry_date < CURDATE()
+    """)
 
     records = cursor.fetchall()
 
-    if len(records) == 0:
+    if not records:
         print("\nNo expired medicines to remove.")
         return
 
-    print("\nExpired Medicines:")
+    headers = [
+        "Medicine ID",
+        "Medicine Name",
+        "Category",
+        "Quantity",
+        "Price",
+        "Expiry Date"
+    ]
+
+    formatted = []
 
     for row in records:
-        print(row)
+        formatted.append([
+            row[0],
+            row[1],
+            row[2],
+            row[3],
+            f"₹{float(row[4]):,.2f}",
+            row[5]
+        ])
+
+    print("\n===== EXPIRED MEDICINES =====\n")
+    print(tabulate(formatted, headers=headers, tablefmt="fancy_grid"))
 
     confirm = input("\nRemove all expired medicines? (yes/no): ")
 
     if confirm.lower() == "yes":
 
-        delete_query = """
-        DELETE FROM medicine
-        WHERE expiry_date < CURDATE();
-        """
-
-        cursor.execute(delete_query)
+        cursor.execute("""
+            DELETE FROM medicine
+            WHERE expiry_date < CURDATE()
+        """)
 
         conn.commit()
 

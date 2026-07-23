@@ -5,6 +5,7 @@ from employee_management import *
 from Login_system import *
 from report import *
 from sale_management import *
+from tabulate import tabulate
 
 
 cursor.execute("""
@@ -36,31 +37,66 @@ def add_medicine():
 
 def view_medicines():
     cursor.execute("SELECT * FROM medicine")
-    rows=cursor.fetchall()
+    rows = cursor.fetchall()
+
     if not rows:
         print("No Medicines Found")
-    for r in rows:
-        print(r)
+        return
+
+    headers = [
+        "Medicine ID",
+        "Medicine Name",
+        "Category",
+        "Quantity",
+        "Price",
+        "Expiry Date"
+    ]
+
+    print(tabulate(rows, headers=headers, tablefmt="grid"))
 
 def search_by_id():
-    mid=int(input("Medicine ID: "))
-    cursor.execute("SELECT * FROM medicine WHERE medicine_id=%s",(mid,))
-    r=cursor.fetchone()
-    print(r if r else "Medicine Not Found")
+    mid = int(input("Medicine ID: "))
+
+    cursor.execute(
+        "SELECT * FROM medicine WHERE medicine_id=%s",
+        (mid,)
+    )
+
+    row = cursor.fetchone()
+
+    if row:
+        headers = [
+            "Medicine ID",
+            "Medicine Name",
+            "Category",
+            "Quantity",
+            "Price",
+            "Expiry Date"
+        ]
+        print(tabulate([row], headers=headers, tablefmt="grid"))
+    else:
+        print("Medicine Not Found")
 
 def search_by_name():
-    name=input("Medicine Name: ")
-    cursor.execute("SELECT * FROM medicine WHERE medicine_name LIKE %s",('%'+name+'%',))
-    rows=cursor.fetchall()
+    name = input("Medicine Name: ")
+
+    cursor.execute(
+        "SELECT * FROM medicine WHERE medicine_name LIKE %s",
+        ('%' + name + '%',)
+    )
+
+    rows = cursor.fetchall()
+
     if rows:
-        for r in rows: 
-            print("-" * 60)
-            print(f"Medicine ID   : {r[0]}")
-            print(f"Name          : {r[1]}")
-            print(f"Category      : {r[2]}")
-            print(f"Quantity      : {r[3]}")
-            print(f"Price         : ₹{r[4]}")
-            print(f"Expiry Date   : {r[5]}")
+        headers = [
+            "Medicine ID",
+            "Medicine Name",
+            "Category",
+            "Quantity",
+            "Price",
+            "Expiry Date"
+        ]
+        print(tabulate(rows, headers=headers, tablefmt="grid"))
     else:
         print("Medicine Not Found")
 
@@ -90,12 +126,14 @@ def delete_medicine():
         print("Medicine Not Found")
 
 def check_stock():
-    cursor.execute("SELECT medicine_name,quantity FROM medicine")
-    rows=cursor.fetchall()
-    if not rows:
+    cursor.execute("SELECT medicine_id, medicine_name, quantity FROM medicine")
+    rows = cursor.fetchall()
+
+    if rows:
+        headers = ["Medicine ID", "Medicine Name", "Stock"]
+        print(tabulate(rows, headers=headers, tablefmt="grid"))
+    else:
         print("No Medicines Available")
-    for n,q in rows:
-        print(f"{n}: {q} Units")
 
 def inventory_menu():
     while True:
